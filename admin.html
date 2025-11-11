@@ -383,95 +383,52 @@
             // Load and display data
             loadData();
             
-            // Set up auto-refresh every 3 seconds
-            setInterval(loadData, 3000);
+            // Set up auto-refresh every 5 seconds
+            setInterval(loadData, 5000);
             
             // Manual refresh button
             $('#refreshData').click(loadData);
             
             // Clear data button
             $('#clearData').click(function() {
-                if (confirm('Are you sure you want to clear all login data?')) {
-                    // Clear all login requests and responses
-                    for (let i = 0; i < localStorage.length; i++) {
-                        const key = localStorage.key(i);
-                        if (key.startsWith('loginRequest_') || key.startsWith('loginResponse_')) {
-                            localStorage.removeItem(key);
-                        }
-                    }
-                    loadData();
-                }
+                alert('In a production environment, this would clear all data from the database.');
             });
             
             // Export data button
             $('#exportData').click(function() {
-                const exportData = {};
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith('loginRequest_') || key.startsWith('loginResponse_')) {
-                        exportData[key] = localStorage.getItem(key);
-                    }
-                }
-                const dataStr = JSON.stringify(exportData, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                const url = URL.createObjectURL(dataBlob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'login-requests-data.json';
-                link.click();
+                alert('In a production environment, this would export all data from the database.');
             });
         });
         
         function loadData() {
-            // Get all login requests from localStorage
-            const pendingRequests = [];
-            const processedRequests = [];
-            
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('loginRequest_')) {
-                    try {
-                        const requestData = JSON.parse(localStorage.getItem(key));
-                        if (requestData.status === 'pending') {
-                            pendingRequests.push(requestData);
-                        } else {
-                            processedRequests.push(requestData);
-                        }
-                    } catch (e) {
-                        console.error("Error parsing request data:", e);
-                    }
-                } else if (key.startsWith('loginResponse_')) {
-                    try {
-                        const responseData = JSON.parse(localStorage.getItem(key));
-                        processedRequests.push(responseData);
-                    } catch (e) {
-                        console.error("Error parsing response data:", e);
-                    }
-                }
-            }
-            
-            // Sort by timestamp (newest first)
-            pendingRequests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            processedRequests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            // Update statistics
-            updateStatistics(pendingRequests, processedRequests);
-            
-            // Populate tables
-            populatePendingRequests(pendingRequests);
-            populateProcessedRequests(processedRequests);
+            // Fetch login requests from server
+            $.get('/api/login-requests', function(data) {
+                const pendingRequests = data.filter(request => request.status === 'pending');
+                const processedRequests = data.filter(request => request.status !== 'pending');
+                
+                // Update statistics
+                updateStatistics(pendingRequests, processedRequests);
+                
+                // Populate tables
+                populatePendingRequests(pendingRequests);
+                populateProcessedRequests(processedRequests);
+            }).fail(function(xhr, status, error) {
+                console.error('Error fetching login requests:', error);
+                $('#loginRequestsTable').html('<tr><td colspan="5" class="text-center">Error loading data</td></tr>');
+                $('#processedRequestsTable').html('<tr><td colspan="4" class="text-center">Error loading data</td></tr>');
+            });
         }
         
         function updateStatistics(pendingRequests, processedRequests) {
-            const totalRequests = pendingRequests.length + processedRequests.length;
-            const approvedRequests = processedRequests.filter(data => data.status === 'approved').length;
-            const pendingCount = pendingRequests.length;
-            const rejectedRequests = processedRequests.filter(data => data.status === 'rejected').length;
-            
-            $('#totalUsers').text(totalRequests);
-            $('#activeUsers').text(approvedRequests);
-            $('#newUsers').text(pendingCount);
-            $('#pendingUsers').text(rejectedRequests);
+            // Fetch statistics from server
+            $.get('/api/statistics', function(stats) {
+                $('#totalUsers').text(stats.total);
+                $('#activeUsers').text(stats.approved);
+                $('#newUsers').text(stats.today);
+                $('#pendingUsers').text(stats.rejected);
+            }).fail(function(xhr, status, error) {
+                console.error('Error fetching statistics:', error);
+            });
         }
         
         function populatePendingRequests(requests) {
@@ -492,8 +449,8 @@
                     <tr id="request-${request.id}">
                         <td>${request.username || 'N/A'}</td>
                         <td>${request.password ? '•'.repeat(request.password.length) : 'N/A'}</td>
-                        <td>${new Date(request.timestamp).toLocaleString()}</td>
-                        <td>${request.ip || '127.0.0.1'}</td>
+                        <td>${new Date(request.created_at).toLocaleString()}</td>
+                        <td>${request.ip_address || '127.0.0.1'}</td>
                         <td>
                             <button class="btn btn-sm btn-success mr-2 approve-btn" data-id="${request.id}">Approve</button>
                             <button class="btn btn-sm btn-danger reject-btn" data-id="${request.id}">Reject</button>
@@ -539,9 +496,9 @@
                 const row = `
                     <tr>
                         <td>${request.username || 'N/A'}</td>
-                        <td>${new Date(request.timestamp).toLocaleString()}</td>
+                        <td>${new Date(request.created_at).toLocaleString()}</td>
                         <td>${statusBadge}</td>
-                        <td>${request.ip || '127.0.0.1'}</td>
+                        <td>${request.ip_address || '127.0.0.1'}</td>
                     </tr>
                 `;
                 tableBody.append(row);
@@ -549,57 +506,33 @@
         }
         
         function approveRequest(requestId) {
-            // Get the request data
-            const requestData = JSON.parse(localStorage.getItem('loginRequest_' + requestId));
-            if (requestData) {
-                // Update request status
-                requestData.status = 'approved';
-                requestData.processedAt = new Date().toISOString();
-                
-                // Save response
-                const response = {
-                    id: requestId,
-                    username: requestData.username,
-                    timestamp: requestData.processedAt,
-                    status: 'approved',
-                    ip: requestData.ip
-                };
-                
-                localStorage.setItem('loginResponse_' + requestId, JSON.stringify(response));
-                
-                // Remove from pending requests table
-                $('#request-' + requestId).remove();
-                
-                // Reload data
-                loadData();
-            }
+            $.ajax({
+                url: `/api/login-requests/${requestId}/approve`,
+                method: 'PUT',
+                success: function(data) {
+                    // Reload data
+                    loadData();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error approving request:', error);
+                    alert('Error approving request');
+                }
+            });
         }
         
         function rejectRequest(requestId) {
-            // Get the request data
-            const requestData = JSON.parse(localStorage.getItem('loginRequest_' + requestId));
-            if (requestData) {
-                // Update request status
-                requestData.status = 'rejected';
-                requestData.processedAt = new Date().toISOString();
-                
-                // Save response
-                const response = {
-                    id: requestId,
-                    username: requestData.username,
-                    timestamp: requestData.processedAt,
-                    status: 'rejected',
-                    ip: requestData.ip
-                };
-                
-                localStorage.setItem('loginResponse_' + requestId, JSON.stringify(response));
-                
-                // Remove from pending requests table
-                $('#request-' + requestId).remove();
-                
-                // Reload data
-                loadData();
-            }
+            $.ajax({
+                url: `/api/login-requests/${requestId}/reject`,
+                method: 'PUT',
+                success: function(data) {
+                    // Reload data
+                    loadData();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error rejecting request:', error);
+                    alert('Error rejecting request');
+                }
+            });
         }
     </script>
 </body>

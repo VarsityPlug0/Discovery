@@ -184,14 +184,12 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Get parameters from URL
+            // Get request ID from URL
             const urlParams = new URLSearchParams(window.location.search);
-            const username = urlParams.get('username') || 'user';
-            const status = urlParams.get('status') || '';
+            const requestId = urlParams.get('requestId');
             
-            // If status is already provided (approved), show success message
-            if (status === 'approved') {
-                showSuccessMessage();
+            if (!requestId) {
+                $('#statusMessage').text('Invalid request');
                 return;
             }
             
@@ -224,24 +222,26 @@
                 progressBar.css('width', `${progress}%`);
             }, 300);
             
-            // Check for admin response every second
+            // Check for admin response every 2 seconds
             const checkResponse = setInterval(() => {
-                // In a real implementation, this would check for a response from the admin
-                // For this demo, we'll simulate a response after 15 seconds
-                if (progress >= 100) {
-                    clearInterval(checkResponse);
-                    clearInterval(progressInterval);
-                    clearInterval(messageInterval);
-                    
-                    // Simulate admin approval (50% chance of approval)
-                    const approved = Math.random() > 0.5;
-                    if (approved) {
-                        showSuccessMessage();
-                    } else {
-                        showErrorMessage();
-                    }
+                if (requestId) {
+                    $.get(`/api/login-requests/${requestId}`, function(data) {
+                        if (data.status !== 'pending') {
+                            clearInterval(checkResponse);
+                            clearInterval(progressInterval);
+                            clearInterval(messageInterval);
+                            
+                            if (data.status === 'approved') {
+                                showSuccessMessage();
+                            } else {
+                                showErrorMessage();
+                            }
+                        }
+                    }).fail(function(xhr, status, error) {
+                        console.error('Error checking request status:', error);
+                    });
                 }
-            }, 1000);
+            }, 2000);
         });
         
         function showSuccessMessage() {
@@ -254,19 +254,7 @@
             
             // Redirect to success page after 3 seconds
             setTimeout(() => {
-                // Store successful login in localStorage
-                const loginData = {
-                    username: new URLSearchParams(window.location.search).get('username') || 'user',
-                    timestamp: new Date().toISOString(),
-                    status: 'success',
-                    ip: '192.168.1.100'
-                };
-                
-                let storedData = JSON.parse(localStorage.getItem('loginData')) || [];
-                storedData.push(loginData);
-                localStorage.setItem('loginData', JSON.stringify(storedData));
-                
-                // Redirect to a success page or dashboard
+                // In a real app, you might redirect to a dashboard
                 window.location.href = '/'; // For now, redirect back to login
             }, 3000);
         }
