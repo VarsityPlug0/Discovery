@@ -1,0 +1,63 @@
+.ddid-list .list-inline.list-inline-divided>.list-inline-item:first-child::before{content:'';position:absolute}.content-lg-left,.content-lg-left.all,.content-lg-right,.content-lg-right.all,.content-md-left,.content-md-left.all,.content-md-right,.content-md-right.all,.content-sm-left,.content-sm-left.all,.content-sm-right,.content-sm-right.all,.content-xs-left,.content-xs-left.all,.content-xs-right,.content-xs-right.all{padding:10px}@media (min-width:768px){.content-xs-right{padding:5px 10px 5px 5px}}@media (min-width:768px){.content-xs-right.all{padding:5px}}@media (min-width:768px){.content-sm-right{padding:10px}}@media (min-width:768px){.content-sm-right.all{padding:10px}}@media (min-width:768px){.content-md-right{padding:15px 10px 15px 15px}}@media (min-width:768px){.content-md-right.all{padding:15px}}@media (min-width:768px){.content-lg-right{padding:45px 10px 45px 45px}}@media (min-width:768px){.content-lg-right.all{padding:45px}}@media (min-width:768px){.content-xs-left{padding:5px 5px 5px 10px}}@media (min-width:768px){.content-xs-left.all{padding:5px}}@media (min-width:768px){.content-sm-left{padding:10px}}@media (min-width:768px){.content-sm-left.all{padding:10px}}@media (min-width:768px){.content-md-left{padding:15px 15px 15px 10px}}@media (min-width:768px){.content-md-left.all{padding:15px}}@media (min-width:768px){.content-lg-left{padding:45px 45px 45px 10px}}@media (min-width:768px){.content-lg-left.all{padding:45px}}.ddid-card{border-radius:5px;box-shadow:0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12),0 3px 1px -2px rgba(0,0,0,.2)}.ddid-carousel .ddid-carousel-item{border:0;border-radius:3px}.ddid-carousel .ddid-carousel-item.card>.list-group:last-child .list-group-item:last-child{border-bottom-right-radius:0;border-bottom-left-radius:0;border-bottom:0}.ddid-carousel .ddid-carousel-item.card>.list-group .list-group-item:first-child{border-top:0}.ddid-carousel .ddid-carousel-item.card .card-block{padding:10px 15px}.ddid-carousel .ddid-carousel-item.card h6{font-size:1.125em;font-weight:600;margin-bottom:0}.ddid-carousel .slick-disabled{opacity:0}.ddid-dropdown-menu{margin-top:2em}.form-dui .form-control.ddid-form-control{display:block;width:100%;padding:10px;font-size:1rem;line-height:1.25;color:#444;background-color:#fff;background-image:0;background-clip:padding-box;border:0;border-bottom:2px solid rgba(0,0,0,.1);transition:all .3s}.form-dui .form-control.ddid-form-control select.form-control:focus::-ms-value{color:#444;background-color:#fff}.form-dui .form-control.ddid-form-control.ddid-form-control:focus{background-color:#fff;border-color:#0e8eff;outline:0}.form-dui svg.input-icon{float:right;margin-right:12px;margin-top:-36px;position:relative;z-index:2}.form-dui .checkbox-group.ddid-group span{float:right}.form-dui .checkbox-group.ddid-group label{text-decoration:none}.ddid-list .list-inline{padding-bottom:15px}.ddid-list .list-inline.list-inline-divided>.list-inline-item>a{padding:0 10px}@media (max-width:991px){.ddid-list .list-inline.list-inline-divided>.list-inline-item>a{padding-left:15px}}@media (max-width:991px){.ddid-list .list-inline.list-inline-divided>.list-inline-item>a{padding-left:15px}}.ddid-list .list-inline.list-inline-divided>.list-inline-item:first-child{padding-left:0;text-indent:0}.ddid-list .list-inline.list-inline-divided>.list-inline-item:first-child::before{width:0;height:0}.ddid-list .list-inline.list-inline-divided>.list-inline-item:first-child>a{padding-left:0}.ddid-list .list-inline.list-inline-divided>.list-inline-item::before{height:10px;top:5px;background:#cfd1d2!important}@media (min-width:992px){.ddid-list .list-inline{margin-bottom:0}}.ddid-container{margin-top:60px;margin-bottom:60px}.ddid-container .site-logo.ddid-logo{width:225px;height:45px;background-size:225px 45px}.ddid-container .btn{border-radius:3px;text-transform:none}.ddid-container .btn.btn-more{padding:3px;border-radius:50%;background:#fff}.ddid-container .btn.btn-more:active,.ddid-container .btn.btn-more:hover{background:rgba(223,226,230,.5)}.tooltip.show{opacity:1!important}.tooltip .tooltip-inner{max-width:200px;padding:3px 8px;color:#000!important;text-align:center;background-color:#d5d5d5!important;border-radius:8px;margin-right:95px}.tooltip .tooltip-inner::before{position:absolute;width:0;height:0;border-top-color:#d5d5d5!important;border-style:solid}.tooltip .tooltip.bs-tether-element-attached-bottom .tooltip-inner::before,.tooltip .tooltip.tooltip-top .tooltip-inner::before{bottom:0;left:50%;margin-left:-5px;content:"";border-width:5px 5px 0;border-top-color:#d5d5d5!important}
+.spinner-main {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-left: -12px; /* half width of the spinner gif */
+    margin-top: -12px; /* half height of the spinner gif */
+    text-align: center;
+    z-index: 99999;
+    overflow: auto;
+    /*width: 80px;  //width of the spinner gif 
+    height: 82px; //hight of the spinner gif +2px to fix IE8 issue */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
+.btnGroup {
+    padding-top: 20px
+}
+
+.regLink {
+    padding-top: 10px
+}
+
+.pwdProgressBar {
+    margin-top: 10px
+}
+
+.pwdProgressBar25 {
+    width: 25%;
+}
+
+.pwdProgressBar50 {
+    width: 50%;
+}
+
+.pwdProgressBar75 {
+    width: 75%;
+}
+
+.pwdProgressBar100 {
+    width: 100%;
+}
+
+.svgIcons {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.ddid-spinner {
+    display: none;
+}
